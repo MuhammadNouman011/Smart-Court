@@ -1,0 +1,3 @@
+# Keep Windows line endings in batch files exactly as committed (also in GitHub "Download ZIP")
+*.bat -text
+*.cmd -text

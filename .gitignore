@@ -1,0 +1,18 @@
+# Dependencies - rebuilt from requirements.txt / package.json
+backend/.venv/
+frontend/node_modules/
+__pycache__/
+*.pyc
+
+# Secrets
+backend/.env
+
+# Local database (user accounts and chat history)
+backend/smartcourt.db
+
+# Build output
+frontend/dist/
+
+# One-click installer (portable Node, launcher scripts, log)
+.runtime/
+setup-log.txt
