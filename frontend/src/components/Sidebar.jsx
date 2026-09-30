@@ -67,8 +67,8 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      {user && (
-        <div className="mt-auto p-4">
+      <div className="mt-auto p-4 flex flex-col gap-3">
+        {user && (
           <div className={`surface rounded-xl p-4 ${isUrdu ? 'urdu' : ''}`}>
             <div className={isUrdu ? 'text-[11px] text-accent-400 mb-2' : 'kicker mb-2'}>
               {t('signedInAs')}
@@ -76,8 +76,22 @@ export default function Sidebar() {
             <div className={`text-[14px] text-cream-100 ${isUrdu ? 'urdu' : ''}`}>{user.full_name}</div>
             <div className="text-[11.5px] text-cream-400 mt-0.5 mono break-all">{user.email}</div>
           </div>
-        </div>
-      )}
+        )}
+
+        {/* Developer credit - intentionally hardcoded, shown on every page, not translated. */}
+        <a
+          href="https://github.com/MuhammadNouman011"
+          target="_blank"
+          rel="noreferrer"
+          dir="ltr"
+          className="group block px-4 py-3 rounded-xl border border-white/[0.08] hover:border-accent-500/40 transition"
+        >
+          <div className="kicker mb-1">Developed by</div>
+          <div className="text-[13.5px] text-cream-100 group-hover:text-accent-400 transition-colors">
+            Muhammad Nouman
+          </div>
+        </a>
+      </div>
     </aside>
   )
 }
