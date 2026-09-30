@@ -72,6 +72,10 @@ function Get-FileHashText([string]$Path) {
     return 'none'
 }
 
+function Write-Utf8NoBom([string]$Path) {
+    process { [IO.File]::WriteAllText($Path, ($_ -replace "`r?`n", "`r`n"), (New-Object Text.UTF8Encoding($false))) }
+}
+
 # Deletes a folder even when it contains paths longer than 260 characters.
 function Remove-LongPath([string]$Path) {
     if (-not (Test-Path $Path)) { return }
@@ -107,6 +111,11 @@ try {
     $freeGB = [math]::Round($drive.Free / 1GB, 1)
     if ($freeGB -lt 8) { Warn "Only $freeGB GB free on drive $($drive.Name):. About 8 GB is needed." }
 } catch {}
+
+# OneDrive-synced folders (Desktop/Documents) lock files while pip/npm write them.
+if ($Root -like '*\OneDrive*') {
+    Warn 'This folder is inside OneDrive. If installing fails, move the project to C:\SmartCourt and run again.'
+}
 
 # RAM
 try {
@@ -297,7 +306,8 @@ Step '[6/7] Backend Python packages'
 $venv    = Join-Path $Backend '.venv'
 $VenvPy  = Join-Path $venv 'Scripts\python.exe'
 $marker  = Join-Path $venv '.smartcourt-installed'
-$reqHash = Get-FileHashText (Join-Path $Backend 'requirements.txt')
+$constraints = Join-Path $Backend 'constraints.txt'
+$reqHash = (Get-FileHashText (Join-Path $Backend 'requirements.txt')) + (Get-FileHashText $constraints)
 
 # A .venv copied from another PC points to a Python that does not exist here.
 if ((Test-Path $venv) -and -not (Test-Python $VenvPy)) {
@@ -309,7 +319,7 @@ if ((Test-Path $venv) -and -not (Test-Python $VenvPy)) {
 # Windows long-path support or pip fails half-way.
 $lp = 0
 try { $lp = (Get-ItemProperty 'HKLM:\SYSTEM\CurrentControlSet\Control\FileSystem' -ErrorAction Stop).LongPathsEnabled } catch {}
-if ($Root.Length -gt 60 -and $lp -ne 1 -and -not (Test-Path $marker)) {
+if ($Root.Length -gt 40 -and $lp -ne 1 -and -not (Test-Path $marker)) {
     Say 'Project folder path is long - enabling Windows long paths (click YES if asked)...'
     try {
         Start-Process -FilePath 'reg.exe' -Verb RunAs -Wait -WindowStyle Hidden -ArgumentList `
@@ -330,7 +340,7 @@ if ((Test-Path $marker) -and ((Get-Content $marker -Raw).Trim() -eq $reqHash)) {
     Invoke-Native { & $VenvPy -m pip install --upgrade pip --disable-pip-version-check } | Out-Null
     $ok = $false
     for ($i = 1; $i -le 3 -and -not $ok; $i++) {
-        $code = Invoke-Native { & $VenvPy -m pip install -r (Join-Path $Backend 'requirements.txt') --disable-pip-version-check }
+        $code = Invoke-Native { & $VenvPy -m pip install -r (Join-Path $Backend 'requirements.txt') -c $constraints --disable-pip-version-check }
         if ($code -eq 0) { $ok = $true } else { Warn "pip failed, retry $i..." }
     }
     if (-not $ok) { Fail 'Installing Python packages failed.' }
@@ -385,6 +395,7 @@ Write-Host '  ============================================================' -For
 $backendCmd = Join-Path $Runtime 'run-backend.cmd'
 @"
 @echo off
+chcp 65001 >nul
 title Smart Court - Backend
 color 0E
 cd /d "$Backend"
@@ -392,11 +403,12 @@ cd /d "$Backend"
 echo.
 echo   Backend stopped. You can close this window.
 pause
-"@ | Set-Content -Path $backendCmd -Encoding ASCII
+"@ | Write-Utf8NoBom $backendCmd
 
 $frontendCmd = Join-Path $Runtime 'run-frontend.cmd'
 @"
 @echo off
+chcp 65001 >nul
 title Smart Court - Frontend
 color 0A
 set "PATH=$NodeDir;%PATH%"
@@ -405,7 +417,7 @@ call "$Npm" run dev -- --port 5173 --strictPort
 echo.
 echo   Frontend stopped. You can close this window.
 pause
-"@ | Set-Content -Path $frontendCmd -Encoding ASCII
+"@ | Write-Utf8NoBom $frontendCmd
 
 if (Test-Url 'http://127.0.0.1:8000/health') {
     Ok 'Backend already running.'
