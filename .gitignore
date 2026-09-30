@@ -16,3 +16,16 @@ frontend/dist/
 # One-click installer (portable Node, launcher scripts, log)
 .runtime/
 setup-log.txt
+
+# Logs, editors, OS
+*.log
+.vscode/
+.idea/
+*.swp
+.DS_Store
+Thumbs.db
+
+# Other local env files (keep the .env.example templates)
+.env
+.env.*
+!.env.example
