@@ -317,7 +317,7 @@ function Toggle({ label, on, setOn, isUrdu }) {
       <span className={`text-[12.5px] ${on ? 'text-accent-300' : 'text-cream-300'} ${isUrdu ? 'urdu' : ''}`}>{label}</span>
       <span className={`w-9 h-5 rounded-full p-0.5 flex ${on ? 'bg-accent-500 justify-end' : 'bg-white/10 justify-start'} ${isUrdu ? 'flex-row-reverse' : ''}`}>
         <motion.span layout transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-          className="block w-4 h-4 rounded-full bg-white"/>
+          className="block w-4 h-4 rounded-full bg-[#fff]"/>
       </span>
     </motion.button>
   )

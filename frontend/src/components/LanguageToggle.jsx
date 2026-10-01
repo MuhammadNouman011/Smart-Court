@@ -17,7 +17,7 @@ export default function LanguageToggle() {
             onClick={() => setLang(code)}
             aria-pressed={active}
             className={`relative px-4 py-1.5 rounded-full text-[12px] transition-colors
-              ${active ? 'text-ink-900 font-medium' : 'text-cream-300 hover:text-cream-100'}`}
+              ${active ? 'text-[#0A0A0B] font-medium' : 'text-cream-300 hover:text-cream-100'}`}
           >
             {active && (
               <motion.span

@@ -4,6 +4,7 @@ import { FileUp, FileText, ShieldAlert, Loader2, X, AlertTriangle, CheckCircle2,
 import { Scanner } from '../lib/api.js'
 import { useLanguage } from '../hooks/useLanguage.jsx'
 import { useToast } from '../hooks/useToast.jsx'
+import { useTheme } from '../hooks/useTheme.jsx'
 
 export default function ContractScanner() {
   const { t, lang, isUrdu } = useLanguage()
@@ -44,7 +45,7 @@ export default function ContractScanner() {
       {/* Drop zone */}
       <div className={`glass rounded-2xl p-6 ${isUrdu ? 'urdu' : ''}`}>
         <div className="flex items-center gap-3 mb-4">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gold-300 to-gold-600 flex items-center justify-center text-ink-900">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#6EE7B7] to-[#047857] flex items-center justify-center text-[#0A0A0B]">
             <ScanSearch size={18}/>
           </div>
           <div>
@@ -215,15 +216,16 @@ function Results({ data }) {
 }
 
 function RiskGauge({ value }) {
+  const { isDark } = useTheme()
   const v = Math.max(0, Math.min(100, Math.round(value)))
   const color =
-    v >= 70 ? '#F87171' :
-    v >= 40 ? '#FACC15' :
-              '#34D399'
+    v >= 70 ? (isDark ? '#F87171' : '#DC2626') :
+    v >= 40 ? (isDark ? '#FACC15' : '#B45309') :
+              (isDark ? '#34D399' : '#047857')
   return (
     <div className="relative w-20 h-20">
       <svg viewBox="0 0 100 100" className="-rotate-90">
-        <circle cx="50" cy="50" r="40" stroke="rgba(255,255,255,0.08)" strokeWidth="10" fill="none"/>
+        <circle cx="50" cy="50" r="40" style={{ stroke: 'rgb(var(--c-overlay) / 0.08)' }} strokeWidth="10" fill="none"/>
         <motion.circle
           cx="50" cy="50" r="40"
           stroke={color} strokeWidth="10" strokeLinecap="round" fill="none"

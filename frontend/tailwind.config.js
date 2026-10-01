@@ -1,50 +1,32 @@
+const v = (name) => `rgb(var(--c-${name}) / <alpha-value>)`
+const shades = (name, keys) => Object.fromEntries(keys.map((k) => [k, v(`${name}-${k}`)]))
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,jsx,ts,tsx}'],
   theme: {
     extend: {
+      // Every palette resolves to a CSS variable (defined per theme in index.css),
+      // so all utilities - including opacity (/60) and hover: variants - follow
+      // the light/dark toggle automatically.
       colors: {
-        // Modern dark tech: charcoal canvas + emerald accent + cream text.
-        ink: {
-          950: '#050507',
-          900: '#0A0A0B',   // base
-          800: '#111114',   // surface
-          700: '#18181B',   // panel
-          600: '#27272A',
-          500: '#3F3F46',
-        },
-        cream: {
-          50:  '#FAFAF9',
-          100: '#F4F4F5',   // primary text
-          200: '#E4E4E7',
-          300: '#A1A1AA',
-          400: '#71717A',
-        },
-        accent: {
-          50:  '#ECFDF5',
-          100: '#D1FAE5',
-          200: '#A7F3D0',
-          300: '#6EE7B7',
-          400: '#34D399',
-          500: '#10B981',   // primary emerald
-          600: '#059669',
-          700: '#047857',
-          800: '#065F46',
-        },
-        rose: {
-          400: '#FB7185',
-          500: '#F43F5E',
-          600: '#E11D48',
-        },
-        amber: {
-          400: '#FBBF24',
-          500: '#F59E0B',
-        },
+        ink:       shades('ink',       [950, 900, 800, 700, 600, 500]),
+        cream:     shades('cream',     [50, 100, 200, 300, 400]),
+        accent:    { ...shades('accent', [200, 300, 400]),
+                     50: '#ECFDF5', 100: '#D1FAE5', 500: '#10B981', 600: '#059669', 700: '#047857', 800: '#065F46' },
+        rose:      { ...shades('rose', [200, 400]), 500: '#F43F5E', 600: '#E11D48' },
+        amber:     shades('amber',     [100, 300, 400, 500]),
+        red:       shades('red',       [100, 300, 400, 500]),
+        slate:     shades('slate',     [100, 300, 400, 700]),
+        sky:       shades('sky',       [100, 400]),
+        // Translucent overlays (bg-white/[0.04], border-white/10 ...): white on dark,
+        // slate on light. Use bg-[#fff] for a literal white.
+        white:     v('overlay'),
         // Legacy aliases (so older files don't error if they sneak through)
-        midnight: { 900: '#0A0A0B', 800: '#111114', 700: '#18181B', 600: '#27272A' },
-        parchment: { 50: '#FAFAF9', 100: '#F4F4F5', 200: '#E4E4E7' },
-        gold: { 300: '#6EE7B7', 400: '#10B981', 500: '#059669', 600: '#047857', 100: '#D1FAE5', 200: '#A7F3D0', 700: '#065F46' },
-        emerald: { 400: '#10B981', 500: '#059669', 600: '#047857' },
+        midnight:  { 900: v('ink-900'), 800: v('ink-800'), 700: v('ink-700'), 600: v('ink-600') },
+        parchment: shades('parchment', [50, 100, 200]),
+        gold:      shades('gold',      [100, 200, 300, 400, 500, 600, 700]),
+        emerald:   shades('emerald',   [200, 300, 400, 500, 600]),
       },
       fontFamily: {
         sans:    ['"Geist"', 'system-ui', 'sans-serif'],

@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useLanguage } from '../hooks/useLanguage.jsx'
+import { useTheme } from '../hooks/useTheme.jsx'
 
 /** Counts up to `target` over `ms` milliseconds. */
 function useCountUp(target, ms = 900) {
@@ -38,16 +39,17 @@ function useCountUp(target, ms = 900) {
  */
 export default function CaseStrengthMeter({ value = 0, label = '', compact = false }) {
   const { t, isUrdu } = useLanguage()
+  const { isDark } = useTheme()
   const safe = Math.max(0, Math.min(100, Math.round(value || 0)))
   const shown = useCountUp(safe, 950)
 
-  // Verdict band
+  // Verdict band (light theme uses deeper shades so the number stays readable on white)
   const band =
-    safe >= 81 ? { key: 'verystrong', en: 'Very strong', ur: 'بہت مضبوط', color: '#10B981', bg: 'rgba(16,185,129,0.10)' }
-  : safe >= 66 ? { key: 'solid',      en: 'Solid',       ur: 'مستحکم',     color: '#34D399', bg: 'rgba(52,211,153,0.10)' }
-  : safe >= 46 ? { key: 'mixed',      en: 'Mixed',       ur: 'مخلوط',      color: '#FBBF24', bg: 'rgba(251,191,36,0.10)' }
-  : safe >= 26 ? { key: 'weak',       en: 'Weak',        ur: 'کمزور',      color: '#FB923C', bg: 'rgba(251,146,60,0.10)' }
-  :              { key: 'fatal',      en: 'Fatally weak',ur: 'انتہائی کمزور', color: '#F43F5E', bg: 'rgba(244,63,94,0.10)' }
+    safe >= 81 ? { key: 'verystrong', en: 'Very strong', ur: 'بہت مضبوط', color: isDark ? '#10B981' : '#047857', bg: 'rgba(16,185,129,0.10)' }
+  : safe >= 66 ? { key: 'solid',      en: 'Solid',       ur: 'مستحکم',     color: isDark ? '#34D399' : '#059669', bg: 'rgba(52,211,153,0.10)' }
+  : safe >= 46 ? { key: 'mixed',      en: 'Mixed',       ur: 'مخلوط',      color: isDark ? '#FBBF24' : '#B45309', bg: 'rgba(251,191,36,0.10)' }
+  : safe >= 26 ? { key: 'weak',       en: 'Weak',        ur: 'کمزور',      color: isDark ? '#FB923C' : '#C2410C', bg: 'rgba(251,146,60,0.10)' }
+  :              { key: 'fatal',      en: 'Fatally weak',ur: 'انتہائی کمزور', color: isDark ? '#F43F5E' : '#BE123C', bg: 'rgba(244,63,94,0.10)' }
 
   return (
     <div className={`w-full ${isUrdu ? 'urdu' : ''}`}>

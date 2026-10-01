@@ -8,6 +8,46 @@
    ────────────────────────────────────────────────────────────────────────── */
 
 @layer base {
+  /* Palette as RGB channels - tailwind.config.js maps every colour class to these,
+     so text-cream-100/60, hover:bg-white/[0.04] etc. all switch with the theme. */
+  :root, [data-theme="dark"] {
+    --c-ink-950: 5 5 7;        --c-ink-900: 10 10 11;     --c-ink-800: 17 17 20;
+    --c-ink-700: 24 24 27;     --c-ink-600: 39 39 42;     --c-ink-500: 63 63 70;
+    --c-cream-50: 250 250 249; --c-cream-100: 244 244 245; --c-cream-200: 228 228 231;
+    --c-cream-300: 161 161 170; --c-cream-400: 113 113 122;
+    --c-parchment-50: 250 250 249; --c-parchment-100: 244 244 245; --c-parchment-200: 228 228 231;
+    --c-accent-200: 167 243 208; --c-accent-300: 110 231 183; --c-accent-400: 52 211 153;
+    --c-gold-100: 209 250 229; --c-gold-200: 167 243 208; --c-gold-300: 110 231 183;
+    --c-gold-400: 16 185 129;  --c-gold-500: 5 150 105;   --c-gold-600: 4 120 87;  --c-gold-700: 6 95 70;
+    --c-emerald-200: 167 243 208; --c-emerald-300: 110 231 183; --c-emerald-400: 16 185 129;
+    --c-emerald-500: 5 150 105;   --c-emerald-600: 4 120 87;
+    --c-rose-200: 254 205 211; --c-rose-400: 251 113 133;
+    --c-amber-100: 254 243 199; --c-amber-300: 252 211 77; --c-amber-400: 251 191 36; --c-amber-500: 245 158 11;
+    --c-red-100: 254 226 226;  --c-red-300: 252 165 165;  --c-red-400: 248 113 113; --c-red-500: 239 68 68;
+    --c-slate-100: 241 245 249; --c-slate-300: 203 213 225; --c-slate-400: 148 163 184; --c-slate-700: 51 65 85;
+    --c-sky-100: 224 242 254;  --c-sky-400: 56 189 248;
+    --c-overlay: 255 255 255;
+  }
+  [data-theme="light"] {
+    /* backgrounds become light, text becomes dark, pastel accents become deep */
+    --c-ink-950: 244 244 245;  --c-ink-900: 255 255 255;  --c-ink-800: 255 255 255;
+    --c-ink-700: 244 244 245;  --c-ink-600: 228 228 231;  --c-ink-500: 212 212 216;
+    --c-cream-50: 15 23 42;    --c-cream-100: 15 23 42;   --c-cream-200: 31 41 55;
+    --c-cream-300: 71 85 105;  --c-cream-400: 100 116 139;
+    --c-parchment-50: 15 23 42; --c-parchment-100: 31 41 55; --c-parchment-200: 51 65 85;
+    --c-accent-200: 6 95 70;   --c-accent-300: 5 150 105; --c-accent-400: 4 120 87;
+    --c-gold-100: 6 78 59;     --c-gold-200: 6 95 70;     --c-gold-300: 4 120 87;
+    --c-gold-400: 5 150 105;   --c-gold-500: 4 120 87;    --c-gold-600: 6 95 70;   --c-gold-700: 6 78 59;
+    --c-emerald-200: 6 95 70;  --c-emerald-300: 4 120 87; --c-emerald-400: 5 150 105;
+    --c-emerald-500: 4 120 87; --c-emerald-600: 6 95 70;
+    --c-rose-200: 159 18 57;   --c-rose-400: 225 29 72;
+    --c-amber-100: 120 53 15;  --c-amber-300: 146 64 14;  --c-amber-400: 180 83 9;  --c-amber-500: 217 119 6;
+    --c-red-100: 127 29 29;    --c-red-300: 185 28 28;    --c-red-400: 220 38 38;  --c-red-500: 239 68 68;
+    --c-slate-100: 15 23 42;   --c-slate-300: 51 65 85;   --c-slate-400: 71 85 105; --c-slate-700: 203 213 225;
+    --c-sky-100: 7 89 133;     --c-sky-400: 2 132 199;
+    --c-overlay: 15 23 42;
+  }
+
   :root, [data-theme="dark"] {
     color-scheme: dark;
     --bg:        #0A0A0B;
@@ -244,7 +284,7 @@
     box-shadow: 0 0 0 2px rgba(16,185,129,0.55);
   }
   .btn-primary {
-    color: var(--bg);
+    color: #0A0A0B;
     background: linear-gradient(180deg, #34D399 0%, #10B981 100%);
     box-shadow: 0 10px 30px -10px rgba(16,185,129,0.55), inset 0 1px 0 rgba(255,255,255,0.25);
   }
@@ -254,10 +294,10 @@
   }
   .btn-ghost {
     color: var(--text);
-    background: rgba(255,255,255,0.04);
+    background: rgb(var(--c-overlay) / 0.04);
     border: 1px solid var(--line-2);
   }
-  .btn-ghost:hover { background: rgba(255,255,255,0.08); border-color: var(--accent-edge); }
+  .btn-ghost:hover { background: rgb(var(--c-overlay) / 0.08); border-color: var(--accent-edge); }
 
   .btn-outline {
     color: var(--accent-2);
@@ -267,7 +307,7 @@
   .btn-outline:hover { background: var(--accent-soft); }
 
   .btn-danger {
-    color: #FCA5A5;
+    color: rgb(var(--c-red-300));
     background: rgba(244,63,94,0.10);
     border: 1px solid rgba(244,63,94,0.40);
   }
@@ -275,7 +315,7 @@
   /* ───── Inputs ───── */
   .input {
     width: 100%;
-    background: rgba(255,255,255,0.03);
+    background: rgb(var(--c-overlay) / 0.03);
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 12px 16px;
@@ -288,7 +328,7 @@
   .input:focus {
     outline: none;
     border-color: var(--accent);
-    background: rgba(255,255,255,0.05);
+    background: rgb(var(--c-overlay) / 0.05);
     box-shadow: 0 0 0 4px var(--accent-soft);
   }
   .label {
@@ -307,7 +347,7 @@
     padding: 4px 10px;
     border-radius: 999px;
     font-size: 11px;
-    background: rgba(255,255,255,0.04);
+    background: rgb(var(--c-overlay) / 0.04);
     border: 1px solid var(--line-2);
     color: var(--text-dim);
     font-family: 'Geist Mono', monospace;
@@ -321,12 +361,12 @@
   .chip-rose {
     background: rgba(244,63,94,0.10);
     border-color: rgba(244,63,94,0.30);
-    color: #FCA5A5;
+    color: rgb(var(--c-red-300));
   }
   .chip-amber {
     background: rgba(245,158,11,0.10);
     border-color: rgba(245,158,11,0.30);
-    color: #FCD34D;
+    color: rgb(var(--c-amber-300));
   }
   /* legacy aliases */
   .chip-gold { @apply chip-accent; }
@@ -346,9 +386,9 @@
 
   .shimmer {
     background: linear-gradient(90deg,
-      rgba(255,255,255,0.03) 0%,
+      rgb(var(--c-overlay) / 0.03) 0%,
       rgba(16,185,129,0.22) 50%,
-      rgba(255,255,255,0.03) 100%);
+      rgb(var(--c-overlay) / 0.03) 100%);
     background-size: 200% 100%;
     @apply animate-shimmer;
   }
@@ -428,33 +468,6 @@
   background: var(--bg);
   color: var(--text);
 }
-[data-theme="light"] .text-cream-50,
-[data-theme="light"] .text-cream-100 { color: #0F172A; }
-[data-theme="light"] .text-cream-200 { color: #1F2937; }
-[data-theme="light"] .text-cream-300 { color: #475569; }
-[data-theme="light"] .text-cream-400 { color: #64748B; }
-[data-theme="light"] .text-parchment-50  { color: #0F172A; }
-[data-theme="light"] .text-parchment-100 { color: #1F2937; }
-[data-theme="light"] .bg-ink-900,
-[data-theme="light"] .bg-ink-900\/70,
-[data-theme="light"] .bg-ink-900\/60,
-[data-theme="light"] .bg-ink-900\/40 { background-color: rgba(255,255,255,0.85); }
-[data-theme="light"] .bg-ink-800,
-[data-theme="light"] .bg-ink-800\/60 { background-color: #FFFFFF; }
-[data-theme="light"] .bg-ink-950,
-[data-theme="light"] .bg-ink-950\/60,
-[data-theme="light"] .bg-ink-950\/70 { background-color: rgba(244,244,245,0.85); }
-[data-theme="light"] .border-white\/\[0\.04\],
-[data-theme="light"] .border-white\/\[0\.06\],
-[data-theme="light"] .border-white\/\[0\.08\],
-[data-theme="light"] .border-white\/10,
-[data-theme="light"] .border-white\/15 { border-color: rgba(15,23,42,0.10); }
-[data-theme="light"] .bg-white\/\[0\.02\],
-[data-theme="light"] .bg-white\/\[0\.04\],
-[data-theme="light"] .bg-white\/\[0\.05\] { background-color: rgba(15,23,42,0.03); }
-[data-theme="light"] .text-accent-400 { color: #047857; }
-[data-theme="light"] .text-accent-500 { color: #065F46; }
-[data-theme="light"] .text-accent-300 { color: #059669; }
 [data-theme="light"] .gold-text {
   background: linear-gradient(135deg, #047857 0%, #059669 50%, #065F46 100%);
   -webkit-background-clip: text; background-clip: text; color: transparent;

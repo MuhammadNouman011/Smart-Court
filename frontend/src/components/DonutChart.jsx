@@ -23,7 +23,7 @@ export default function DonutChart({
         {/* track */}
         <circle
           cx={size / 2} cy={size / 2} r={radius}
-          fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth={thickness}
+          fill="none" style={{ stroke: 'rgb(var(--c-overlay) / 0.06)' }} strokeWidth={thickness}
         />
         {data.map((d, i) => {
           const len = (d.percent / 100) * circ

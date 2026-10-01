@@ -104,7 +104,7 @@ export default function DocumentDrafter() {
       {/* Left — form */}
       <div className={`glass rounded-2xl p-6 ${isUrdu ? 'urdu' : ''}`}>
         <div className="flex items-center gap-3 mb-5">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-gold-300 to-gold-600 flex items-center justify-center text-ink-900">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-[#6EE7B7] to-[#047857] flex items-center justify-center text-[#0A0A0B]">
             <FilePen size={18}/>
           </div>
           <div>
